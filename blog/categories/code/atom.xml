@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[LYON SUN]]></title>
-  <link href="http://lyonsun.github.io/atom.xml" rel="self"/>
+  <title><![CDATA[Category: Code | LYON SUN]]></title>
+  <link href="http://lyonsun.github.io/blog/categories/code/atom.xml" rel="self"/>
   <link href="http://lyonsun.github.io/"/>
   <updated>2014-10-09T13:27:13+08:00</updated>
   <id>http://lyonsun.github.io/</id>
