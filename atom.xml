@@ -4,7 +4,7 @@
   <title><![CDATA[LYON SUN]]></title>
   <link href="http://lyonsun.github.io/atom.xml" rel="self"/>
   <link href="http://lyonsun.github.io/"/>
-  <updated>2014-10-17T23:08:40+08:00</updated>
+  <updated>2014-10-29T21:55:59+08:00</updated>
   <id>http://lyonsun.github.io/</id>
   <author>
     <name><![CDATA[Lyon Sun]]></name>
@@ -12,6 +12,116 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Magento Theme Design - I]]></title>
+    <link href="http://lyonsun.github.io/blog/2014/10/28/magento-theme-design-i/"/>
+    <updated>2014-10-28T21:44:42+08:00</updated>
+    <id>http://lyonsun.github.io/blog/2014/10/28/magento-theme-design-i</id>
+    <content type="html"><![CDATA[<h2>序</h2>
+
+<p>这些天，开始接触Magento的方方面面，发现确实是个很不错的框架。只是对Zend Framework了解不多，所以刚开始总会有些摸不着内在的逻辑关系。不过，学习起来，还是很顺手的。下面的内容基本上参阅<em>Mastering Magento Theme Design</em>2013版这本书。这本书上讲解十分详尽，值得一读。</p>
+
+<h2>文</h2>
+
+<h3>Magento模版设计第一步:创建文件夹</h3>
+
+<p>在app文件夹下面创建模版文件夹（假定模版名demotheme）：</p>
+
+<ol>
+<li>创建文件夹<strong>app/design/frontend/demotheme</strong>;</li>
+<li>在该文件夹下面创建子文件夹<strong>app/design/frontend/demotheme/default</strong>;</li>
+<li><p>再在该文件夹下面创建三个子文件夹：</p>
+
+<ul>
+<li><strong>app/design/frontend/demotheme/default/template</strong>;</li>
+<li><strong>app/design/frontend/demotheme/default/layout</strong>;</li>
+<li><strong>app/design/frontend/demotheme/default/locale</strong>;</li>
+</ul>
+</li>
+</ol>
+
+
+<p>在skin文件夹下面创建模版文件夹：</p>
+
+<ol>
+<li>创建文件夹<strong>skin/frontend/demotheme</strong>;</li>
+<li>在该文件夹下面创建子文件夹<strong>skin/frontend/demotheme/default</strong>;</li>
+<li><p>再在该文件夹下面创建三个子文件夹：</p>
+
+<ul>
+<li><strong>skin/frontend/demotheme/default/css</strong>;</li>
+<li><strong>skin/frontend/demotheme/default/images</strong>;</li>
+<li><strong>skin/frontend/demotheme/default/js</strong>;</li>
+</ul>
+</li>
+</ol>
+
+
+<h3>Magento模版设计第二步：创建必要文件</h3>
+
+<p>Magento的模版设计，可以通过直接创建空白文件开始，也可以通过复制base模版里面的文件来开始。后者是更容易上手的一个方式。</p>
+
+<p>复制<strong>app/design/frontend/base/default/template</strong>中的下列文件/文件夹到<strong>app/design/frontend/demotheme/default/template</strong>：</p>
+
+<ol>
+<li><strong>page/1column.phtml</strong>;</li>
+<li><strong>page/2columns-left.phtml</strong>;</li>
+<li><strong>page/2columns-right.phtml</strong>;</li>
+<li><strong>page/3columns.phtml</strong>;</li>
+<li><strong>page/html/head.phtml</strong>;</li>
+<li><strong>page/html/header.phtml</strong>;</li>
+<li><strong>page/html/footer.phtml</strong>;</li>
+</ol>
+
+
+<p>创建<strong>app/design/frontend/base/default/layout/layout.xml</strong>文件，并在该文件中填入以下代码：</p>
+
+<pre><code>&lt;?xml version="1.0"?&gt;
+
+&lt;!-- 
+/**
+* local.xml
+* Local layout modifications for our local theme
+* @category design
+* @package  demotheme
+* @copyright Copyright (c) 2014 Lyon Sun
+*/
+ --&gt;
+
+&lt;layout version="0.1.0"&gt;
+    &lt;default&gt;
+
+    &lt;/default&gt;
+&lt;/layout&gt;
+</code></pre>
+
+<h3>Magento模版设计第三步：禁用缓存</h3>
+
+<p>为了避免开发过程中的不连续性，有必要将Magento的缓存系统禁用。</p>
+
+<ol>
+<li>进入Admin管理界面，系统 -> 缓存管理；</li>
+<li>全选所有项，在操作下拉列表里选择禁用，然后提交；</li>
+</ol>
+
+
+<h3>Magento模版设计第四步：激活模版</h3>
+
+<p>对于单商铺网站，激活模版十分简单。</p>
+
+<ol>
+<li>进入Admin管理界面，系统 -> 配置；</li>
+<li>然后选择设计标签页；</li>
+<li>在包栏（第一栏）替换之前的包名rwd为demotheme，然后点击保存配置即可。</li>
+</ol>
+
+
+<h2>尾</h2>
+
+<p>至此，Magento模版开发的准备工作就绪。这时，打开Magento的前台界面，会发现页面已经没有任何设计风格了。这就为我们之后开始定制模版铺好了道路。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Some Unexpected Issues I Encountered While Learning Build Magento Extensions]]></title>
