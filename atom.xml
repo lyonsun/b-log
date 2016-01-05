@@ -1,0 +1,300 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[LYON SUN]]></title>
+  <link href="http://lyonsun.github.io/atom.xml" rel="self"/>
+  <link href="http://lyonsun.github.io/"/>
+  <updated>2015-09-15T19:25:26+03:00</updated>
+  <id>http://lyonsun.github.io/</id>
+  <author>
+    <name><![CDATA[Lyon Sun]]></name>
+    <email><![CDATA[sunly917@gmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Create Cron Jobs on Different Operating Systems]]></title>
+    <link href="http://lyonsun.github.io/blog/2015/03/03/create-cron-jobs-on-different-operating-systems/"/>
+    <updated>2015-03-03T08:03:15+02:00</updated>
+    <id>http://lyonsun.github.io/blog/2015/03/03/create-cron-jobs-on-different-operating-systems</id>
+    <content type="html"><![CDATA[<h2>序</h2>
+
+<p>不同的操作系统环境下，定时任务的创建方式也是不一样的。Windows上面，是通过任务计划实现的。Mac OSX跟其他Linux系统上，则可以直接通过命令行crontab来创建。</p>
+
+<h2>文</h2>
+
+<p>以获取当前blockchain上面的比特币兑换行情为例。</p>
+
+<h4>Windows OS</h4>
+
+<p>首先，需要写一小段VBScript代码：</p>
+
+<pre><code>' VBS script to send HTTP POST request to a URL.
+' author: Lyon Sun &lt;sunly917@gmail.com&gt;
+' last modified: 2015-03-03 14:07:31
+
+' URL to open....
+sUrl = "https://blockchain.info/ticker"
+
+' log file destination
+sDestFolder = ""
+logFile = "cron_job_btc_" &amp; Year(Date) &amp; "_" &amp; Month(Date) &amp; "_" &amp; Day(Date) &amp; "_" Hour(Date) &amp; "_" &amp; Minute(Date) &amp; "_" &amp; Second(Date) &amp; ".log"
+
+' comment out next line to have a dialog notifying task is done.
+' WScript.Echo "Done..."
+
+' call HTTPGet function
+HTTPGet sUrl
+
+' HTTPGet function to send request
+Function HTTPGet(sUrl)
+
+    set oHTTP = CreateObject("Microsoft.XMLHTTP")
+    oHTTP.open "GET", sUrl, false
+    oHTTP.send
+    HTTPResp = oHTTP.responseText
+
+    ' write log into log file
+    If oHTTP.Status = 200 Then 
+        With CreateObject("ADODB.Stream")
+            .Type = 1
+            .Open
+            .Write oHTTP.responseBody
+            .SaveToFile logFile
+            .Close
+        End With
+    End If
+
+End Function
+</code></pre>
+
+<p>存储这段代码在磁盘的任何位置，如桌面。</p>
+
+<p>然后，在开始菜单，附件，系统工具下找到任务计划程序。点击打开。</p>
+
+<p>Trigger里面设置该程式运行的频次。Action里面选择启动一个程序，然后在文件选择窗里选择刚才存储的VBScript代码文件。在参数与启动文件夹输入框里面，分别同时填上该代码所在的文件夹的绝对路径。</p>
+
+<p>启动该任务计划。取决于Trigger里面设置的频次，该任务计划将在设定时间运行。</p>
+
+<h4>Mac OSX及其他Linux Distribution</h4>
+
+<p>相对来说，在osx或者Linux上面建立定时任务，要简单得多。</p>
+
+<p>打开命令行终端，输入：</p>
+
+<pre><code>crontab -e
+</code></pre>
+
+<p>按键盘按键<code>i</code>进入编辑模式。然后添加如下一行代码：</p>
+
+<pre><code>0 0 * * * * /usr/bin/curl --silent --compressed https://blockchain.info/ticker &gt; cron_job_btc.log
+</code></pre>
+
+<p>完成。该任务计划将每天运行一次。</p>
+
+<h2>尾</h2>
+
+<p>Windows操作系统上，POST请求稍有不同，具体见该<a href="https://gist.github.com/lyonsun/cda807ad2dd949610dc6">Gist代码片段</a>. 另外，Windows上面创建任务计划时，一定要注意在Action里面填写参数及启动文件夹输入框。否则，Vista等要求UAC的系统版本里面，可能任务计划执行不了。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Magento Theme Design - I]]></title>
+    <link href="http://lyonsun.github.io/blog/2014/10/28/magento-theme-design-i/"/>
+    <updated>2014-10-28T15:44:42+02:00</updated>
+    <id>http://lyonsun.github.io/blog/2014/10/28/magento-theme-design-i</id>
+    <content type="html"><![CDATA[<h2>序</h2>
+
+<p>这些天，开始接触Magento的方方面面，发现确实是个很不错的框架。只是对Zend Framework了解不多，所以刚开始总会有些摸不着内在的逻辑关系。不过，学习起来，还是很顺手的。下面的内容基本上参阅<em>Mastering Magento Theme Design</em>2013版这本书。这本书上讲解十分详尽，值得一读。</p>
+
+<h2>文</h2>
+
+<h3>Magento模版设计第一步:创建文件夹</h3>
+
+<p>在app文件夹下面创建模版文件夹（假定模版名demotheme）：</p>
+
+<ol>
+<li>创建文件夹<strong>app/design/frontend/demotheme</strong>;</li>
+<li>在该文件夹下面创建子文件夹<strong>app/design/frontend/demotheme/default</strong>;</li>
+<li><p>再在该文件夹下面创建三个子文件夹：</p>
+
+<ul>
+<li><strong>app/design/frontend/demotheme/default/template</strong>;</li>
+<li><strong>app/design/frontend/demotheme/default/layout</strong>;</li>
+<li><strong>app/design/frontend/demotheme/default/locale</strong>;</li>
+</ul>
+</li>
+</ol>
+
+
+<p>在skin文件夹下面创建模版文件夹：</p>
+
+<ol>
+<li>创建文件夹<strong>skin/frontend/demotheme</strong>;</li>
+<li>在该文件夹下面创建子文件夹<strong>skin/frontend/demotheme/default</strong>;</li>
+<li><p>再在该文件夹下面创建三个子文件夹：</p>
+
+<ul>
+<li><strong>skin/frontend/demotheme/default/css</strong>;</li>
+<li><strong>skin/frontend/demotheme/default/images</strong>;</li>
+<li><strong>skin/frontend/demotheme/default/js</strong>;</li>
+</ul>
+</li>
+</ol>
+
+
+<h3>Magento模版设计第二步：创建必要文件</h3>
+
+<p>Magento的模版设计，可以通过直接创建空白文件开始，也可以通过复制base模版里面的文件来开始。后者是更容易上手的一个方式。</p>
+
+<p>复制<strong>app/design/frontend/base/default/template</strong>中的下列文件/文件夹到<strong>app/design/frontend/demotheme/default/template</strong>：</p>
+
+<ol>
+<li><strong>page/1column.phtml</strong>;</li>
+<li><strong>page/2columns-left.phtml</strong>;</li>
+<li><strong>page/2columns-right.phtml</strong>;</li>
+<li><strong>page/3columns.phtml</strong>;</li>
+<li><strong>page/html/head.phtml</strong>;</li>
+<li><strong>page/html/header.phtml</strong>;</li>
+<li><strong>page/html/footer.phtml</strong>;</li>
+</ol>
+
+
+<p>创建<strong>app/design/frontend/base/default/layout/layout.xml</strong>文件，并在该文件中填入以下代码：</p>
+
+<pre><code>&lt;?xml version="1.0"?&gt;
+
+&lt;!-- 
+/**
+* local.xml
+* Local layout modifications for our local theme
+* @category design
+* @package  demotheme
+* @copyright Copyright (c) 2014 Lyon Sun
+*/
+ --&gt;
+
+&lt;layout version="0.1.0"&gt;
+    &lt;default&gt;
+
+    &lt;/default&gt;
+&lt;/layout&gt;
+</code></pre>
+
+<h3>Magento模版设计第三步：禁用缓存</h3>
+
+<p>为了避免开发过程中的不连续性，有必要将Magento的缓存系统禁用。</p>
+
+<ol>
+<li>进入Admin管理界面，系统 -> 缓存管理；</li>
+<li>全选所有项，在操作下拉列表里选择禁用，然后提交；</li>
+</ol>
+
+
+<h3>Magento模版设计第四步：激活模版</h3>
+
+<p>对于单商铺网站，激活模版十分简单。</p>
+
+<ol>
+<li>进入Admin管理界面，系统 -> 配置；</li>
+<li>然后选择设计标签页；</li>
+<li>在包栏（第一栏）替换之前的包名rwd为demotheme，然后点击保存配置即可。</li>
+</ol>
+
+
+<h2>尾</h2>
+
+<p>至此，Magento模版开发的准备工作就绪。这时，打开Magento的前台界面，会发现页面已经没有任何设计风格了。这就为我们之后开始定制模版铺好了道路。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Some Unexpected Issues I Encountered While Learning Build Magento Extensions]]></title>
+    <link href="http://lyonsun.github.io/blog/2014/10/17/some-unexpected-issues-i-encountered-while-learning-build-magento-extensions/"/>
+    <updated>2014-10-17T18:01:38+03:00</updated>
+    <id>http://lyonsun.github.io/blog/2014/10/17/some-unexpected-issues-i-encountered-while-learning-build-magento-extensions</id>
+    <content type="html"><![CDATA[<p>Learning something new is always nice and with a lot of fun. But there also always will be something not clearly stated in books or other materials, which is not fun and sometimes wastes me plenty of time to figure it out, or worsier, drives me crazy.</p>
+
+<p>Here are some unexpected issues I&rsquo;ve faced while reading a book and starting this exciting Magento extension development adventure.</p>
+
+<h2>Issue 1: Cannot login to admin area after successful installation</h2>
+
+<p>Well, this is pretty odd. I installed Magento on my Mac Pro under MAMP environment. Everything went perfectly, except one:</p>
+
+<h3>I can&rsquo;t login to admin area.</h3>
+
+<ol>
+<li>There is no error, nothing. Well, there is something: web page actually get refreshed, and url also get updated to something like: <a href="http://localhost:8888/magento/index.php/admin/dashboard/index/key/099e02f9fc33d69ca3fee8f0f5b2b7f6/">http://localhost:8888/magento/index.php/admin/dashboard/index/key/099e02f9fc33d69ca3fee8f0f5b2b7f6/</a>. This url is not always the same, especially the serial at the last.</li>
+<li>This issue happens on Google Chrome/Opera/Safari, but not Firefox.</li>
+<li>If I close this page, and then reopen it and navigate with admin url, I get presented with admin area page.</li>
+<li>Safari and Opera will start to work well if I just logout and login again. But Chrome failed to do so. It keeps giving the login page with url similar to the one emphasized above.</li>
+</ol>
+
+
+<p>Someone asked this question on SO, but he/she had some other more critial issue on Firefox. However, no absolutely correct answer has been given for this question.</p>
+
+<p>According to the url that get updated, it apparently says I have been redirected to dashboard page, but due to some reason, Chrome just isn&rsquo;t able to load the view.</p>
+
+<p>At the time of writing, I still have no idea what went wrong.</p>
+
+<h2>Issue 2: Not get &ldquo;Hello World #1.&rdquo; message in sample HappyHour extension</h2>
+
+<p>This is odd too&hellip; I carefully followed the tutorial on book <em>Getting Started with Magento Extension Development</em>. It was quite simple an extension. Actually code is only one line in an action method inside a class:</p>
+
+<pre><code>&lt;?php 
+
+class Foggyline_HappyHour_HelloController extends Mage_Core_Controller_Front_Action
+{
+    public function helloWorldAction()
+    {
+        echo "Hello World #1.";
+    }
+}
+</code></pre>
+
+<p>Nothing funcy. But when I navigate to <a href="http://localhost:8888/magento/happyhour/hello/helloWorld">http://localhost:8888/magento/happyhour/hello/helloWorld</a> as I&rsquo;ve been told to, I get 404 response.</p>
+
+<p>Then when I go to admin area, and navigate to <strong>System > Configuration > Advanced > Advanced</strong>, and save configuration, I see magic <strong>Hello World</strong> message after a refresh on frontend.</p>
+
+<p>And I also have no idea why things work this way, not that being told on the book.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Do a Backup, Whenever Possible!]]></title>
+    <link href="http://lyonsun.github.io/blog/2014/10/09/do-a-backup/"/>
+    <updated>2014-10-09T08:58:22+03:00</updated>
+    <id>http://lyonsun.github.io/blog/2014/10/09/do-a-backup</id>
+    <content type="html"><![CDATA[<h2>序</h2>
+
+<p>I never thought it would be so much pain when something get lost.</p>
+
+<p>生活中总是会出现这样那样的情况，很多时候它们突如其来，并不会给你机会去做任何准备，或者说已经提前给了你做准备的机会，只不过你没有用心体会，没有留意它的稍纵易逝。</p>
+
+<h2>情景</h2>
+
+<p>这次国庆回家，路上闲来没事，开始瞎倒腾，发现之前搭建在Github上的Octopress博客已经好久没更新了。恰逢自己开始学习Magento，于是写了一篇博文。</p>
+
+<p>写完之后，想在本地环境下面看看效果。可是Octopress那些命令已经抛在脑后好远。</p>
+
+<p>既然是瞎倒腾，也就不管那么多了。于是稀里糊涂地在Terminal终端上执行了一堆乱七八糟的命令。最后的情况可想而知，Octopress的本地文件夹被完完全全给蹂躏了。</p>
+
+<p>折腾不出来就不继续折腾了，在路上也没有网络，等回来有网了再弄吧。</p>
+
+<p>回来之后，也不知道是哪根筋抽了，也没先看官方wiki，又是一堆乱七八糟的命令，其中包括Git更新的，于是Github上的source分支，也被无情地覆盖掉了。之前地source分支下地source文件夹不见了，当然还有其他一些文件和文件夹。</p>
+
+<p>后续一些补救工作就不说了，越弄越浑。</p>
+
+<h2>结论</h2>
+
+<ul>
+<li>不要在不知道怎么做的情况下，去做任何事情。很有可能，你只有一次机会。</li>
+<li>在不知道怎么做的情况下，依然想去做任何事情的话，先备份，再在备份下面进行其他动作。</li>
+<li>不要不懂装懂，花大量的时间去瞎折腾，不如把时间花在学习怎么去好好折腾上面。</li>
+</ul>
+
+]]></content>
+  </entry>
+  
+</feed>

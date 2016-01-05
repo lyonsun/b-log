@@ -1,0 +1,287 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Some Unexpected Issues I Encountered While Learning Build Magento Extensions - LYON SUN</title>
+  <meta name="author" content="Lyon Sun">
+
+  
+  <meta name="description" content="Learning something new is always nice and with a lot of fun. But there also always will be something not clearly stated in books or other materials, &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://lyonsun.github.io/blog/2014/10/17/some-unexpected-issues-i-encountered-while-learning-build-magento-extensions">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="LYON SUN" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">LYON SUN</a></h1>
+  
+    <h2>吾生有涯而知无涯</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:lyonsun.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/ME-learning-diary">ME Learning Diary</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Some Unexpected Issues I Encountered While Learning Build Magento Extensions</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2014-10-17T18:01:38+03:00'><span class='date'><span class='date-month'>Oct</span> <span class='date-day'>17</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>6:01 pm</span></time>
+        
+           | <a href="#disqus_thread"
+             data-disqus-identifier="http://lyonsun.github.io">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Learning something new is always nice and with a lot of fun. But there also always will be something not clearly stated in books or other materials, which is not fun and sometimes wastes me plenty of time to figure it out, or worsier, drives me crazy.</p>
+
+<p>Here are some unexpected issues I&rsquo;ve faced while reading a book and starting this exciting Magento extension development adventure.</p>
+
+<h2>Issue 1: Cannot login to admin area after successful installation</h2>
+
+<p>Well, this is pretty odd. I installed Magento on my Mac Pro under MAMP environment. Everything went perfectly, except one:</p>
+
+<h3>I can&rsquo;t login to admin area.</h3>
+
+<ol>
+<li>There is no error, nothing. Well, there is something: web page actually get refreshed, and url also get updated to something like: <a href="http://localhost:8888/magento/index.php/admin/dashboard/index/key/099e02f9fc33d69ca3fee8f0f5b2b7f6/">http://localhost:8888/magento/index.php/admin/dashboard/index/key/099e02f9fc33d69ca3fee8f0f5b2b7f6/</a>. This url is not always the same, especially the serial at the last.</li>
+<li>This issue happens on Google Chrome/Opera/Safari, but not Firefox.</li>
+<li>If I close this page, and then reopen it and navigate with admin url, I get presented with admin area page.</li>
+<li>Safari and Opera will start to work well if I just logout and login again. But Chrome failed to do so. It keeps giving the login page with url similar to the one emphasized above.</li>
+</ol>
+
+
+<p>Someone asked this question on SO, but he/she had some other more critial issue on Firefox. However, no absolutely correct answer has been given for this question.</p>
+
+<p>According to the url that get updated, it apparently says I have been redirected to dashboard page, but due to some reason, Chrome just isn&rsquo;t able to load the view.</p>
+
+<p>At the time of writing, I still have no idea what went wrong.</p>
+
+<h2>Issue 2: Not get &ldquo;Hello World #1.&rdquo; message in sample HappyHour extension</h2>
+
+<p>This is odd too&hellip; I carefully followed the tutorial on book <em>Getting Started with Magento Extension Development</em>. It was quite simple an extension. Actually code is only one line in an action method inside a class:</p>
+
+<pre><code>&lt;?php 
+
+class Foggyline_HappyHour_HelloController extends Mage_Core_Controller_Front_Action
+{
+    public function helloWorldAction()
+    {
+        echo "Hello World #1.";
+    }
+}
+</code></pre>
+
+<p>Nothing funcy. But when I navigate to <a href="http://localhost:8888/magento/happyhour/hello/helloWorld">http://localhost:8888/magento/happyhour/hello/helloWorld</a> as I&rsquo;ve been told to, I get 404 response.</p>
+
+<p>Then when I go to admin area, and navigate to <strong>System > Configuration > Advanced > Advanced</strong>, and save configuration, I see magic <strong>Hello World</strong> message after a refresh on frontend.</p>
+
+<p>And I also have no idea why things work this way, not that being told on the book.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Lyon Sun</span></span>
+
+      
+
+
+
+
+<time class='entry-date' datetime='2014-10-17T18:01:38+03:00'><span class='date'><span class='date-month'>Oct</span> <span class='date-day'>17</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>6:01 pm</span></time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/magento/'>magento</a>, <a class='category' href='/blog/categories/php/'>php</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2014/10/09/do-a-backup/" title="Previous Post: Do a backup, whenever possible!">&laquo; Do a backup, whenever possible!</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2014/10/28/magento-theme-design-i/" title="Next Post: magento theme design - I">magento theme design - I &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2015/03/03/create-cron-jobs-on-different-operating-systems/">Create Cron Jobs on Different Operating Systems</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/10/28/magento-theme-design-i/">Magento Theme Design - I</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/10/17/some-unexpected-issues-i-encountered-while-learning-build-magento-extensions/">Some Unexpected Issues I Encountered While Learning Build Magento Extensions</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/10/09/do-a-backup/">Do a Backup, Whenever Possible!</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  
+  <a href="https://github.com/lyonsun">@lyonsun</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'lyonsun',
+            count: 3,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2015 - Lyon Sun -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'lyonsun';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://lyonsun.github.io/blog/2014/10/17/some-unexpected-issues-i-encountered-while-learning-build-magento-extensions/';
+        var disqus_url = 'http://lyonsun.github.io/blog/2014/10/17/some-unexpected-issues-i-encountered-while-learning-build-magento-extensions/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
